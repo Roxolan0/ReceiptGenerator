@@ -22,6 +22,7 @@ public class ReceiptDisplay {
 	private static final String TOTAL_COST = "Total";
 	private static final String CONCLUSION = "Thank you for shopping at SupaMarket";
 	private static final String DISCOUNT_2FOR1 = "  2 for 1 discount";
+	private static final String DISCOUNT_3FOR2 = "  3 for 2 offer";
 	
 	private static String repeatChar(char repeatedChar, int length) {
 		if(length < 0) {
@@ -61,6 +62,19 @@ public class ReceiptDisplay {
 						+ repeatChar(' ', TOTAL_LENGTH - DISCOUNT_2FOR1.length() - discount2for1String.length())
 						+ discount2for1String
 						+ "\n");
+			}
+		}
+		
+		receipt.separateFreeFruitVeggie(productDatabase);
+		if(receipt.getFreeFruitVeggie() != null) {
+			for(String productName : receipt.getFreeFruitVeggie().keySet()) {
+				String discount3for2String = "-" + COST_FORMAT.format(productDatabase.get(productName).getPrice());
+				for(int i = 0; i < receipt.getFreeFruitVeggie().get(productName); ++i) {
+					System.out.print(DISCOUNT_3FOR2
+							+ repeatChar(' ', TOTAL_LENGTH - DISCOUNT_3FOR2.length() - discount3for2String.length())
+							+ discount3for2String
+							+ "\n");
+				}
 			}
 		}
 		

@@ -1,7 +1,6 @@
 package receiptgenerator.business;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class Receipt extends HashMap<String, Integer> {
 
@@ -22,12 +21,20 @@ public class Receipt extends HashMap<String, Integer> {
 	public int getAmount(String productName) {
 		return get(productName);
 	}
+	
+	public Receipt getFreeFruitVeggie() {
+		return freeFruitVeggie;
+	}
 
 	public Integer put(String productName, Integer productQuantity) {
 		Integer returnValue;
 		if (containsKey(productName)) {
-			returnValue = super.put(productName, get(productName)
-					+ productQuantity);
+			if(get(productName) + productQuantity <= 0) {
+				returnValue = remove(productName);
+			} else {
+				returnValue = super.put(productName, get(productName)
+						+ productQuantity);
+			}
 		} else {
 			returnValue = super.put(productName, productQuantity);
 		}
@@ -94,6 +101,14 @@ public class Receipt extends HashMap<String, Integer> {
 
 		return cheapestFruitVeggie;
 	}
+	
+	public void addReceipt(Receipt receipt) {
+		if(receipt != null) {
+			for(String productName : receipt.keySet()) {
+				put(productName, receipt.get(productName));
+			}
+		}
+	}
 
 	public void separateFreeFruitVeggie(ProductDatabase productDatabase) {
 		freeFruitVeggie = new Receipt();
@@ -125,8 +140,9 @@ public class Receipt extends HashMap<String, Integer> {
 	}
 
 	public double totalPrice(ProductDatabase productDatabase) {
+		addReceipt(freeFruitVeggie);
 		double total = totalPriceWithoutDiscounts(productDatabase);
-
+		
 		for (String productName : keySet()) {
 			total -= discount2For1ForProduct(productName, productDatabase);
 		}

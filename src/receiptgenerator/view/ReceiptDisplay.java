@@ -2,8 +2,8 @@ package receiptgenerator.view;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
-import java.util.HashMap;
 
+import receiptgenerator.business.ProductDatabase;
 import receiptgenerator.business.Receipt;
 
 
@@ -31,7 +31,7 @@ public class ReceiptDisplay {
 		return new String(array);
 	}
 	
-	public static void printReceipt(Receipt receipt, HashMap<String, Double> priceList) {		
+	public static void printReceipt(Receipt receipt, ProductDatabase productDatabase) {		
 		System.out.print(repeatChar(' ', (TOTAL_LENGTH - TITLE.length())/2) + TITLE + "\n");
 		System.out.print("\n");
 		
@@ -45,7 +45,7 @@ public class ReceiptDisplay {
 		
 		for(String productName : receipt.getPurchasedProductNames()) {
 			String quantity = Integer.toString(receipt.getAmount(productName));
-			String price = PRICE_FORMAT.format(receipt.totalPriceForProduct(productName, priceList));
+			String price = PRICE_FORMAT.format(receipt.totalPriceForProduct(productName, productDatabase));
 			String receiptLine = "";
 			receiptLine += productName + repeatChar(' ', ITEM_LENGTH - productName.length());
 			receiptLine += quantity;
@@ -56,7 +56,7 @@ public class ReceiptDisplay {
 		
 		System.out.print(repeatChar('-', TOTAL_LENGTH) + "\n");
 		
-		String totalPrice = "£" + PRICE_FORMAT.format(receipt.totalPrice(priceList));
+		String totalPrice = "£" + PRICE_FORMAT.format(receipt.totalPrice(productDatabase));
 		System.out.print(TOTAL 
 				+ repeatChar(' ', TOTAL_LENGTH - TOTAL.length() - totalPrice.length()) 
 				+ totalPrice

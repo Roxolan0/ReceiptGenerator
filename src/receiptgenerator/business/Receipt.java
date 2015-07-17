@@ -49,21 +49,21 @@ public class Receipt {
 		}
 	}
 	
-	public double totalPriceForProduct(String productName, HashMap<String, Double> priceList) {
+	public double totalPriceForProduct(String productName, ProductDatabase productDatabase) {
 		double total = 0.0;
 		
-		if(purchasedProducts.containsKey(productName) && priceList.containsKey(productName)) {
-			total = purchasedProducts.get(productName) * priceList.get(productName);
+		if(purchasedProducts.containsKey(productName) && productDatabase.containsKey(productName)) {
+			total = purchasedProducts.get(productName) * productDatabase.get(productName).getPrice();
 		}
 		
 		return total;
 	}
 	
-	public double totalPrice(HashMap<String, Double> priceList) {
+	public double totalPrice(ProductDatabase productDatabase) {
 		double total = 0.0;
 		
 		for(String product : purchasedProducts.keySet()) {
-			total += totalPriceForProduct(product, priceList);
+			total += totalPriceForProduct(product, productDatabase);
 		}
 		
 		return total;

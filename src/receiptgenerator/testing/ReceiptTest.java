@@ -1,8 +1,13 @@
 package receiptgenerator.testing;
 
 import java.util.HashMap;
+
 import static org.junit.Assert.*;
+
 import org.junit.Test;
+
+import receiptgenerator.business.Product;
+import receiptgenerator.business.ProductDatabase;
 import receiptgenerator.business.Receipt;
 
 /* 
@@ -10,6 +15,16 @@ import receiptgenerator.business.Receipt;
  */
 public class ReceiptTest {
 	private static final double EPSILON = 1e-15;
+	public static final ProductDatabase productDatabase;
+	static {
+		productDatabase = new ProductDatabase();
+		productDatabase.put(new Product("Orange", 0.4, false, true));
+		productDatabase.put(new Product("Banana", 0.12, false, true));
+		productDatabase.put(new Product("Tomato", 0.2, false, true));
+		productDatabase.put(new Product("Box of cereal", 1.8, false, false));
+		productDatabase.put(new Product("Loaf of bread", 0.8, false, false));
+		productDatabase.put(new Product("Frozen pizza", 2.5, true, false));
+	}
 	
 	@Test
 	public void parseTillOutputTest1() {
@@ -57,12 +72,9 @@ public class ReceiptTest {
 		String testTillOutput = "Orange|5\nBanana|3\n";
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
-		HashMap<String, Double> testPriceList = new HashMap<String, Double>();
-		testPriceList.put("Orange", 0.4);
-		testPriceList.put("Banana", 0.12);
 		
-		assertEquals(testReceipt.totalPriceForProduct("Orange", testPriceList), 2.0, EPSILON);
-		assertEquals(testReceipt.totalPriceForProduct("Banana", testPriceList), 0.36, EPSILON);
+		assertEquals(testReceipt.totalPriceForProduct("Orange", productDatabase), 2.0, EPSILON);
+		assertEquals(testReceipt.totalPriceForProduct("Banana", productDatabase), 0.36, EPSILON);
 	}
 	
 	@Test
@@ -70,16 +82,11 @@ public class ReceiptTest {
 		String testTillOutput = "Orange|1\nTomato|3\nFrozen pizza|3\nBox of cereal|2\n";
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
-		HashMap<String, Double> testPriceList = new HashMap<String, Double>();
-		testPriceList.put("Orange", 0.4);
-		testPriceList.put("Tomato", 0.2);
-		testPriceList.put("Box of cereal", 1.8);
-		testPriceList.put("Frozen pizza", 2.5);
 		
-		assertEquals(testReceipt.totalPriceForProduct("Orange", testPriceList), 0.4, EPSILON);
-		assertEquals(testReceipt.totalPriceForProduct("Tomato", testPriceList), 0.6, EPSILON);
-		assertEquals(testReceipt.totalPriceForProduct("Box of cereal", testPriceList),3.6, EPSILON);
-		assertEquals(testReceipt.totalPriceForProduct("Frozen pizza", testPriceList), 7.5, EPSILON);
+		assertEquals(testReceipt.totalPriceForProduct("Orange", productDatabase), 0.4, EPSILON);
+		assertEquals(testReceipt.totalPriceForProduct("Tomato", productDatabase), 0.6, EPSILON);
+		assertEquals(testReceipt.totalPriceForProduct("Box of cereal", productDatabase),3.6, EPSILON);
+		assertEquals(testReceipt.totalPriceForProduct("Frozen pizza", productDatabase), 7.5, EPSILON);
 	}
 	
 	@Test
@@ -87,11 +94,8 @@ public class ReceiptTest {
 		String testTillOutput = "Orange|5\nBanana|3\n";
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
-		HashMap<String, Double> testPriceList = new HashMap<String, Double>();
-		testPriceList.put("Orange", 0.4);
-		testPriceList.put("Banana", 0.12);
 		
-		assertEquals(testReceipt.totalPrice(testPriceList), 2.36, EPSILON);
+		assertEquals(testReceipt.totalPrice(productDatabase), 2.36, EPSILON);
 	}
 	
 	@Test
@@ -99,13 +103,8 @@ public class ReceiptTest {
 		String testTillOutput = "Orange|1\nTomato|3\nFrozen pizza|3\nBox of cereal|2\n";
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
-		HashMap<String, Double> testPriceList = new HashMap<String, Double>();
-		testPriceList.put("Orange", 0.4);
-		testPriceList.put("Tomato", 0.2);
-		testPriceList.put("Box of cereal", 1.8);
-		testPriceList.put("Frozen pizza", 2.5);
 		
-		assertEquals(testReceipt.totalPrice(testPriceList), 12.1, EPSILON);
+		assertEquals(testReceipt.totalPrice(productDatabase), 12.1, EPSILON);
 	}
 
 }

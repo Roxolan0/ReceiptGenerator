@@ -19,11 +19,18 @@ public class Task1 {
 	}
 	
 	public static void main(String[] args) {
-//		Receipt receipt = new Receipt(args[0]);
-//		Receipt receipt = new Receipt("Orange|5\nBanana|3\n");
-		Receipt receipt = new Receipt("Orange|1\nTomato|3\nFrozen pizza|3\nBox of cereal|2\n");
-//		Receipt receipt = new Receipt("Loaf of bread|1\n");
-		ReceiptDisplay.printReceipt(receipt, priceList);
+		Receipt receipt;
+		if(args.length > 0) {
+			receipt = new Receipt(args[0]);
+			ReceiptDisplay.printReceipt(receipt, priceList);
+		} else {
+			receipt = new Receipt("Orange|5\nBanana|3\n");
+			ReceiptDisplay.printReceipt(receipt, priceList);
+			receipt = new Receipt("Orange|1\nTomato|3\nFrozen pizza|3\nBox of cereal|2\n");
+			ReceiptDisplay.printReceipt(receipt, priceList);
+			receipt = new Receipt("Loaf of bread|1\n");
+			ReceiptDisplay.printReceipt(receipt, priceList);
+		}
 	}
 	
 }

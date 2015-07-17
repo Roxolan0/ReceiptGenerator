@@ -53,11 +53,11 @@ public class ReceiptTest {
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
 		
-		assertEquals(testReceipt.getPurchasedProducts().size(), 2);
-		assertTrue(testReceipt.getPurchasedProducts().containsKey("Orange"));
-		assertEquals((int) testReceipt.getPurchasedProducts().get("Orange"), 5);
-		assertTrue(testReceipt.getPurchasedProducts().containsKey("Banana"));
-		assertEquals((int) testReceipt.getPurchasedProducts().get("Banana"), 3);
+		assertEquals(testReceipt.size(), 2);
+		assertTrue(testReceipt.containsKey("Orange"));
+		assertEquals((int) testReceipt.get("Orange"), 5);
+		assertTrue(testReceipt.containsKey("Banana"));
+		assertEquals((int) testReceipt.get("Banana"), 3);
 	}
 
 	@Test
@@ -66,15 +66,15 @@ public class ReceiptTest {
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
 		
-		assertEquals(testReceipt.getPurchasedProducts().size(), 4);
-		assertTrue(testReceipt.getPurchasedProducts().containsKey("Orange"));
-		assertEquals((int) testReceipt.getPurchasedProducts().get("Orange"), 1);
-		assertTrue(testReceipt.getPurchasedProducts().containsKey("Tomato"));
-		assertEquals((int) testReceipt.getPurchasedProducts().get("Tomato"), 3);
-		assertTrue(testReceipt.getPurchasedProducts().containsKey("Frozen pizza"));
-		assertEquals((int) testReceipt.getPurchasedProducts().get("Frozen pizza"), 3);
-		assertTrue(testReceipt.getPurchasedProducts().containsKey("Box of cereal"));
-		assertEquals((int) testReceipt.getPurchasedProducts().get("Box of cereal"), 2);
+		assertEquals(testReceipt.size(), 4);
+		assertTrue(testReceipt.containsKey("Orange"));
+		assertEquals((int) testReceipt.get("Orange"), 1);
+		assertTrue(testReceipt.containsKey("Tomato"));
+		assertEquals((int) testReceipt.get("Tomato"), 3);
+		assertTrue(testReceipt.containsKey("Frozen pizza"));
+		assertEquals((int) testReceipt.get("Frozen pizza"), 3);
+		assertTrue(testReceipt.containsKey("Box of cereal"));
+		assertEquals((int) testReceipt.get("Box of cereal"), 2);
 	}
 
 	@Test
@@ -83,9 +83,9 @@ public class ReceiptTest {
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
 		
-		assertEquals(testReceipt.getPurchasedProducts().size(), 1);
-		assertTrue(testReceipt.getPurchasedProducts().containsKey("Loaf of bread"));
-		assertEquals((int) testReceipt.getPurchasedProducts().get("Loaf of bread"), 1);
+		assertEquals(testReceipt.size(), 1);
+		assertTrue(testReceipt.containsKey("Loaf of bread"));
+		assertEquals((int) testReceipt.get("Loaf of bread"), 1);
 	}
 	
 	@Test

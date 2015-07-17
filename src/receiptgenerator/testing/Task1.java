@@ -19,9 +19,9 @@ public class Task1 {
 	}
 	
 	public static void main(String[] args) {
-		Receipt receipt = new Receipt(args[0]);
+//		Receipt receipt = new Receipt(args[0]);
 //		Receipt receipt = new Receipt("Orange|5\nBanana|3\n");
-//		Receipt receipt = new Receipt("Orange|1\nTomato|3\nFrozen pizza|3\nBox of cereal|2\n");
+		Receipt receipt = new Receipt("Orange|1\nTomato|3\nFrozen pizza|3\nBox of cereal|2\n");
 //		Receipt receipt = new Receipt("Loaf of bread|1\n");
 		ReceiptDisplay.printReceipt(receipt, priceList);
 	}

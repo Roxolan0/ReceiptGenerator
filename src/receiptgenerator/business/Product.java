@@ -19,7 +19,7 @@ public class Product {
 	public double getPrice() {
 		return price;
 	}
-	public boolean isIs2for1() {
+	public boolean is2for1() {
 		return is2for1;
 	}
 	public boolean isFruitOrVegetable() {

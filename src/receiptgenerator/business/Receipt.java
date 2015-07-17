@@ -1,7 +1,6 @@
 package receiptgenerator.business;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class Receipt {
 	
@@ -62,8 +61,11 @@ public class Receipt {
 	public double totalPrice(ProductDatabase productDatabase) {
 		double total = 0.0;
 		
-		for(String product : purchasedProducts.keySet()) {
-			total += totalPriceForProduct(product, productDatabase);
+		for(String productName : purchasedProducts.keySet()) {
+			total += totalPriceForProduct(productName, productDatabase);
+			if(productDatabase.get(productName).is2for1()) {
+				total -= purchasedProducts.get(productName)/2 * productDatabase.get(productName).getPrice();
+			}
 		}
 		
 		return total;

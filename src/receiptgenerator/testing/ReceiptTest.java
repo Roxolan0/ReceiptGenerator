@@ -15,15 +15,33 @@ import receiptgenerator.business.Receipt;
  */
 public class ReceiptTest {
 	private static final double EPSILON = 1e-15;
-	public static final ProductDatabase productDatabase;
+	public static final ProductDatabase productDatabaseTask1;
+	public static final ProductDatabase productDatabaseTask2;
+	public static final ProductDatabase productDatabaseTask3;
 	static {
-		productDatabase = new ProductDatabase();
-		productDatabase.put(new Product("Orange", 0.4, false, true));
-		productDatabase.put(new Product("Banana", 0.12, false, true));
-		productDatabase.put(new Product("Tomato", 0.2, false, true));
-		productDatabase.put(new Product("Box of cereal", 1.8, false, false));
-		productDatabase.put(new Product("Loaf of bread", 0.8, false, false));
-		productDatabase.put(new Product("Frozen pizza", 2.5, true, false));
+		productDatabaseTask1 = new ProductDatabase();
+		productDatabaseTask1.put(new Product("Orange", 0.4, false, false));
+		productDatabaseTask1.put(new Product("Banana", 0.12, false, false));
+		productDatabaseTask1.put(new Product("Tomato", 0.2, false, false));
+		productDatabaseTask1.put(new Product("Box of cereal", 1.8, false, false));
+		productDatabaseTask1.put(new Product("Loaf of bread", 0.8, false, false));
+		productDatabaseTask1.put(new Product("Frozen pizza", 2.5, false, false));
+		
+		productDatabaseTask2 = new ProductDatabase();
+		productDatabaseTask2.put(new Product("Orange", 0.4, false, false));
+		productDatabaseTask2.put(new Product("Banana", 0.12, false, false));
+		productDatabaseTask2.put(new Product("Tomato", 0.2, false, false));
+		productDatabaseTask2.put(new Product("Box of cereal", 1.8, false, false));
+		productDatabaseTask2.put(new Product("Loaf of bread", 0.8, false, false));
+		productDatabaseTask2.put(new Product("Frozen pizza", 2.5, true, false));
+		
+		productDatabaseTask3 = new ProductDatabase();
+		productDatabaseTask3.put(new Product("Orange", 0.4, false, true));
+		productDatabaseTask3.put(new Product("Banana", 0.12, false, true));
+		productDatabaseTask3.put(new Product("Tomato", 0.2, false, true));
+		productDatabaseTask3.put(new Product("Box of cereal", 1.8, false, false));
+		productDatabaseTask3.put(new Product("Loaf of bread", 0.8, false, false));
+		productDatabaseTask3.put(new Product("Frozen pizza", 2.5, true, false));
 	}
 	
 	@Test
@@ -73,8 +91,8 @@ public class ReceiptTest {
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
 		
-		assertEquals(testReceipt.totalPriceForProduct("Orange", productDatabase), 2.0, EPSILON);
-		assertEquals(testReceipt.totalPriceForProduct("Banana", productDatabase), 0.36, EPSILON);
+		assertEquals(testReceipt.totalPriceForProduct("Orange", productDatabaseTask1), 2.0, EPSILON);
+		assertEquals(testReceipt.totalPriceForProduct("Banana", productDatabaseTask1), 0.36, EPSILON);
 	}
 	
 	@Test
@@ -83,10 +101,10 @@ public class ReceiptTest {
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
 		
-		assertEquals(testReceipt.totalPriceForProduct("Orange", productDatabase), 0.4, EPSILON);
-		assertEquals(testReceipt.totalPriceForProduct("Tomato", productDatabase), 0.6, EPSILON);
-		assertEquals(testReceipt.totalPriceForProduct("Box of cereal", productDatabase),3.6, EPSILON);
-		assertEquals(testReceipt.totalPriceForProduct("Frozen pizza", productDatabase), 7.5, EPSILON);
+		assertEquals(testReceipt.totalPriceForProduct("Orange", productDatabaseTask1), 0.4, EPSILON);
+		assertEquals(testReceipt.totalPriceForProduct("Tomato", productDatabaseTask1), 0.6, EPSILON);
+		assertEquals(testReceipt.totalPriceForProduct("Box of cereal", productDatabaseTask1),3.6, EPSILON);
+		assertEquals(testReceipt.totalPriceForProduct("Frozen pizza", productDatabaseTask1), 7.5, EPSILON);
 	}
 	
 	@Test
@@ -95,7 +113,7 @@ public class ReceiptTest {
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
 		
-		assertEquals(testReceipt.totalPrice(productDatabase), 2.36, EPSILON);
+		assertEquals(testReceipt.totalPrice(productDatabaseTask1), 2.36, EPSILON);
 	}
 	
 	@Test
@@ -104,7 +122,7 @@ public class ReceiptTest {
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
 		
-		assertEquals(testReceipt.totalPrice(productDatabase), 12.1, EPSILON);
+		assertEquals(testReceipt.totalPrice(productDatabaseTask1), 12.1, EPSILON);
 	}
 
 }

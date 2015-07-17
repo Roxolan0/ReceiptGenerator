@@ -1,13 +1,11 @@
 package receiptgenerator.testing;
 
-import java.util.HashMap;
-
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import receiptgenerator.business.Product;
-import receiptgenerator.business.ProductDatabase;
+import receiptgenerator.business.Item;
+import receiptgenerator.business.ItemDatabase;
 import receiptgenerator.business.Receipt;
 
 /* 
@@ -15,35 +13,42 @@ import receiptgenerator.business.Receipt;
  */
 public class ReceiptTest {
 	private static final double EPSILON = 1e-15;
-	public static final ProductDatabase productDatabaseTask1;
-	public static final ProductDatabase productDatabaseTask2;
-	public static final ProductDatabase productDatabaseTask3;
+	public static final ItemDatabase itemDatabaseTask1;
+	public static final ItemDatabase itemDatabaseTask2;
+	public static final ItemDatabase itemDatabaseTask3;
 	static {
-		productDatabaseTask1 = new ProductDatabase();
-		productDatabaseTask1.put(new Product("Orange", 0.4, false, false));
-		productDatabaseTask1.put(new Product("Banana", 0.12, false, false));
-		productDatabaseTask1.put(new Product("Tomato", 0.2, false, false));
-		productDatabaseTask1.put(new Product("Box of cereal", 1.8, false, false));
-		productDatabaseTask1.put(new Product("Loaf of bread", 0.8, false, false));
-		productDatabaseTask1.put(new Product("Frozen pizza", 2.5, false, false));
-		
-		productDatabaseTask2 = new ProductDatabase();
-		productDatabaseTask2.put(new Product("Orange", 0.4, false, false));
-		productDatabaseTask2.put(new Product("Banana", 0.12, false, false));
-		productDatabaseTask2.put(new Product("Tomato", 0.2, false, false));
-		productDatabaseTask2.put(new Product("Box of cereal", 1.8, false, false));
-		productDatabaseTask2.put(new Product("Loaf of bread", 0.8, false, false));
-		productDatabaseTask2.put(new Product("Frozen pizza", 2.5, true, false));
-		
-		productDatabaseTask3 = new ProductDatabase();
-		productDatabaseTask3.put(new Product("Orange", 0.4, false, true));
-		productDatabaseTask3.put(new Product("Banana", 0.12, false, true));
-		productDatabaseTask3.put(new Product("Tomato", 0.2, false, true));
-		productDatabaseTask3.put(new Product("Box of cereal", 1.8, false, false));
-		productDatabaseTask3.put(new Product("Loaf of bread", 0.8, false, false));
-		productDatabaseTask3.put(new Product("Frozen pizza", 2.5, true, false));
+		itemDatabaseTask1 = new ItemDatabase();
+		itemDatabaseTask1.put(new Item("Orange", 0.4, false, false));
+		itemDatabaseTask1.put(new Item("Banana", 0.12, false, false));
+		itemDatabaseTask1.put(new Item("Tomato", 0.2, false, false));
+		itemDatabaseTask1
+				.put(new Item("Box of cereal", 1.8, false, false));
+		itemDatabaseTask1
+				.put(new Item("Loaf of bread", 0.8, false, false));
+		itemDatabaseTask1
+				.put(new Item("Frozen pizza", 2.5, false, false));
+
+		itemDatabaseTask2 = new ItemDatabase();
+		itemDatabaseTask2.put(new Item("Orange", 0.4, false, false));
+		itemDatabaseTask2.put(new Item("Banana", 0.12, false, false));
+		itemDatabaseTask2.put(new Item("Tomato", 0.2, false, false));
+		itemDatabaseTask2
+				.put(new Item("Box of cereal", 1.8, false, false));
+		itemDatabaseTask2
+				.put(new Item("Loaf of bread", 0.8, false, false));
+		itemDatabaseTask2.put(new Item("Frozen pizza", 2.5, true, false));
+
+		itemDatabaseTask3 = new ItemDatabase();
+		itemDatabaseTask3.put(new Item("Orange", 0.4, false, true));
+		itemDatabaseTask3.put(new Item("Banana", 0.12, false, true));
+		itemDatabaseTask3.put(new Item("Tomato", 0.2, false, true));
+		itemDatabaseTask3
+				.put(new Item("Box of cereal", 1.8, false, false));
+		itemDatabaseTask3
+				.put(new Item("Loaf of bread", 0.8, false, false));
+		itemDatabaseTask3.put(new Item("Frozen pizza", 2.5, true, false));
 	}
-	
+
 	/*
 	 * Task 1 tests
 	 */
@@ -52,7 +57,7 @@ public class ReceiptTest {
 		String testTillOutput = "Orange|5\nBanana|3\n";
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
-		
+
 		assertEquals(testReceipt.size(), 2);
 		assertTrue(testReceipt.containsKey("Orange"));
 		assertEquals((int) testReceipt.get("Orange"), 5);
@@ -65,7 +70,7 @@ public class ReceiptTest {
 		String testTillOutput = "Orange|1\nTomato|3\nFrozen pizza|3\nBox of cereal|2\n";
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
-		
+
 		assertEquals(testReceipt.size(), 4);
 		assertTrue(testReceipt.containsKey("Orange"));
 		assertEquals((int) testReceipt.get("Orange"), 1);
@@ -82,70 +87,79 @@ public class ReceiptTest {
 		String testTillOutput = "Loaf of bread|1\n";
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
-		
+
 		assertEquals(testReceipt.size(), 1);
 		assertTrue(testReceipt.containsKey("Loaf of bread"));
 		assertEquals((int) testReceipt.get("Loaf of bread"), 1);
 	}
-	
+
 	@Test
-	public void totalPriceForProductTask1Test1() {
+	public void totalCostForItemTask1Test1() {
 		String testTillOutput = "Orange|5\nBanana|3\n";
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
-		
-		assertEquals(testReceipt.totalPriceForProduct("Orange", productDatabaseTask1), 2.0, EPSILON);
-		assertEquals(testReceipt.totalPriceForProduct("Banana", productDatabaseTask1), 0.36, EPSILON);
+
+		assertEquals(testReceipt.totalCostForItem("Orange",
+				itemDatabaseTask1), 2.0, EPSILON);
+		assertEquals(testReceipt.totalCostForItem("Banana",
+				itemDatabaseTask1), 0.36, EPSILON);
 	}
-	
+
 	@Test
-	public void totalPriceForProductTask1Test2() {
+	public void totalCostForItemTask1Test2() {
 		String testTillOutput = "Orange|1\nTomato|3\nFrozen pizza|3\nBox of cereal|2\n";
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
-		
-		assertEquals(testReceipt.totalPriceForProduct("Orange", productDatabaseTask1), 0.4, EPSILON);
-		assertEquals(testReceipt.totalPriceForProduct("Tomato", productDatabaseTask1), 0.6, EPSILON);
-		assertEquals(testReceipt.totalPriceForProduct("Box of cereal", productDatabaseTask1),3.6, EPSILON);
-		assertEquals(testReceipt.totalPriceForProduct("Frozen pizza", productDatabaseTask1), 7.5, EPSILON);
+
+		assertEquals(testReceipt.totalCostForItem("Orange",
+				itemDatabaseTask1), 0.4, EPSILON);
+		assertEquals(testReceipt.totalCostForItem("Tomato",
+				itemDatabaseTask1), 0.6, EPSILON);
+		assertEquals(testReceipt.totalCostForItem("Box of cereal",
+				itemDatabaseTask1), 3.6, EPSILON);
+		assertEquals(testReceipt.totalCostForItem("Frozen pizza",
+				itemDatabaseTask1), 7.5, EPSILON);
 	}
-	
+
 	@Test
-	public void totalPriceTask1Test1() {
+	public void totalCostTask1Test1() {
 		String testTillOutput = "Orange|5\nBanana|3\n";
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
-		
-		assertEquals(testReceipt.totalPrice(productDatabaseTask1), 2.36, EPSILON);
+
+		assertEquals(testReceipt.totalCost(itemDatabaseTask1), 2.36,
+				EPSILON);
 	}
-	
+
 	@Test
-	public void totalPriceTask1Test2() {
+	public void totalCostTask1Test2() {
 		String testTillOutput = "Orange|1\nTomato|3\nFrozen pizza|3\nBox of cereal|2\n";
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
-		
-		assertEquals(testReceipt.totalPrice(productDatabaseTask1), 12.1, EPSILON);
+
+		assertEquals(testReceipt.totalCost(itemDatabaseTask1), 12.1,
+				EPSILON);
 	}
-	
+
 	/*
 	 * Task 2 tests
 	 */
 	@Test
-	public void totalPriceTask2Test1() {
+	public void totalCostTask2Test1() {
 		String testTillOutput = "Orange|5\nBanana|3\n";
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
-		
-		assertEquals(testReceipt.totalPrice(productDatabaseTask2), 2.36, EPSILON);
+
+		assertEquals(testReceipt.totalCost(itemDatabaseTask2), 2.36,
+				EPSILON);
 	}
-	
+
 	@Test
-	public void totalPriceTask2Test2() {
+	public void totalCostTask2Test2() {
 		String testTillOutput = "Orange|1\nTomato|3\nFrozen pizza|3\nBox of cereal|2\n";
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
-		
-		assertEquals(testReceipt.totalPrice(productDatabaseTask2), 9.6, EPSILON);
+
+		assertEquals(testReceipt.totalCost(itemDatabaseTask2), 9.6, EPSILON);
 	}
 }

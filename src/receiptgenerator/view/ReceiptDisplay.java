@@ -3,18 +3,19 @@ package receiptgenerator.view;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
-import receiptgenerator.business.ProductDatabase;
+import receiptgenerator.business.ItemDatabase;
 import receiptgenerator.business.Receipt;
 
-
 public class ReceiptDisplay {
-	
+
+	//Dimensions and number format of the printed receipt
 	private static final DecimalFormat COST_FORMAT = new DecimalFormat("#0.00");
 	private static final int ITEM_LENGTH = 21;
 	private static final int QUANTITY_LENGTH = 10;
 	private static final int COST_LENGTH = 7;
 	private static final int TOTAL_LENGTH = ITEM_LENGTH + QUANTITY_LENGTH + COST_LENGTH;
-	
+
+	//English-language strings to print
 	private static final String TITLE = "Customer Receipt";
 	private static final String ITEM = "Item";
 	private static final String QUANTITY = "Quantity";
@@ -23,20 +24,33 @@ public class ReceiptDisplay {
 	private static final String CONCLUSION = "Thank you for shopping at SupaMarket";
 	private static final String DISCOUNT_2FOR1 = "  2 for 1 discount";
 	private static final String DISCOUNT_3FOR2 = "  3 for 2 offer";
-	
+
+	/**
+	 * Creates a String containing a single character repeated a number of times.
+	 * @param repeatedChar The repeated character.
+	 * @param length The number of repetitions.
+	 * @return
+	 */
 	private static String repeatChar(char repeatedChar, int length) {
-		if(length < 0) {
+		if (length < 0) {
 			length = 0;
 		}
 		char[] array = new char[length];
 		Arrays.fill(array, repeatedChar);
 		return new String(array);
 	}
-	
-	public static void printReceipt(Receipt receipt, ProductDatabase productDatabase) {		
-		System.out.print(repeatChar(' ', (TOTAL_LENGTH - TITLE.length())/2) + TITLE + "\n");
+
+	/**
+	 * Prints a properly-formated receipt.
+	 * @param receipt The receipt data to print.
+	 * @param itemDatabase An item database from which to get extra information.
+	 */
+	public static void printReceipt(Receipt receipt, ItemDatabase itemDatabase) {
+		//Title
+		System.out.print(repeatChar(' ', (TOTAL_LENGTH - TITLE.length()) / 2) + TITLE + "\n");
 		System.out.print("\n");
 		
+		//Column headers
 		String headerLine = "";
 		headerLine += ITEM + repeatChar(' ', ITEM_LENGTH - ITEM.length());
 		headerLine += QUANTITY;
@@ -44,48 +58,50 @@ public class ReceiptDisplay {
 		headerLine += COST;
 		System.out.print(headerLine + "\n");
 		System.out.print(repeatChar('-', TOTAL_LENGTH) + "\n");
-		
-		for(String productName : receipt.getPurchasedProductNames()) {
-			String quantity = Integer.toString(receipt.getAmount(productName));
-			String price = COST_FORMAT.format(receipt.totalPriceForProduct(productName, productDatabase));
+
+		//One line per item
+		for (String itemName : receipt.keySet()) {
+			String quantity = Integer.toString(receipt.get(itemName));
+			String cost = COST_FORMAT.format(receipt.totalCostForItem(itemName, itemDatabase));
 			String receiptLine = "";
-			receiptLine += productName + repeatChar(' ', ITEM_LENGTH - productName.length());
+			receiptLine += itemName + repeatChar(' ', ITEM_LENGTH - itemName.length());
 			receiptLine += quantity;
-			receiptLine += repeatChar(' ', TOTAL_LENGTH - receiptLine.length() - price.length());
-			receiptLine += price;
+			receiptLine += repeatChar(' ', TOTAL_LENGTH - receiptLine.length() - cost.length());
+			receiptLine += cost;
 			System.out.print(receiptLine + "\n");
 			
-			double discount2for1 = receipt.discount2For1ForProduct(productName, productDatabase);
-			if(discount2for1 > 0) {
+			//2-for-1 discount (if any)
+			double discount2for1 = receipt.discount2For1ForItem(itemName, itemDatabase);
+			if (discount2for1 > 0) {
 				String discount2for1String = "-" + COST_FORMAT.format(discount2for1);
-				System.out.print(DISCOUNT_2FOR1 
-						+ repeatChar(' ', TOTAL_LENGTH - DISCOUNT_2FOR1.length() - discount2for1String.length())
-						+ discount2for1String
-						+ "\n");
+				System.out.print(DISCOUNT_2FOR1
+					+ repeatChar(' ', TOTAL_LENGTH - DISCOUNT_2FOR1.length() - discount2for1String.length())
+					+ discount2for1String + "\n");
 			}
 		}
-		
-		receipt.separateFreeFruitVeggie(productDatabase);
-		if(receipt.getFreeFruitVeggie() != null) {
-			for(String productName : receipt.getFreeFruitVeggie().keySet()) {
-				String discount3for2String = "-" + COST_FORMAT.format(productDatabase.get(productName).getPrice());
-				for(int i = 0; i < receipt.getFreeFruitVeggie().get(productName); ++i) {
-					System.out.print(DISCOUNT_3FOR2
-							+ repeatChar(' ', TOTAL_LENGTH - DISCOUNT_3FOR2.length() - discount3for2String.length())
-							+ discount3for2String
-							+ "\n");
+
+		//3-for-2 discounts (if any)
+		receipt.separateFreeFruitVeggie(itemDatabase);
+		if (receipt.getFreeFruitVeggie() != null) {
+			for (String itemName : receipt.getFreeFruitVeggie().keySet()) {
+				String discount3for2String = "-" + COST_FORMAT.format(itemDatabase.get(itemName).getCost());
+				for (int i = 0; i < receipt.getFreeFruitVeggie().get(itemName); ++i) {
+					System.out.print(DISCOUNT_3FOR2 
+						+ repeatChar(' ', TOTAL_LENGTH - DISCOUNT_3FOR2.length() - discount3for2String.length())
+						+ discount3for2String + "\n");
 				}
 			}
 		}
-		
+
 		System.out.print(repeatChar('-', TOTAL_LENGTH) + "\n");
-		
-		String totalCost = "£" + COST_FORMAT.format(receipt.totalPrice(productDatabase));
-		System.out.print(TOTAL_COST 
-				+ repeatChar(' ', TOTAL_LENGTH - TOTAL_COST.length() - totalCost.length()) 
-				+ totalCost
-				+ "\n");
+
+		//Total
+		String totalCost = "£" + COST_FORMAT.format(receipt.totalCost(itemDatabase));
+		System.out.print(TOTAL_COST
+				+ repeatChar(' ', TOTAL_LENGTH - TOTAL_COST.length() - totalCost.length()) + totalCost + "\n");
 		System.out.print("\n");
-		System.out.print(repeatChar(' ', (TOTAL_LENGTH - CONCLUSION.length())/2) + CONCLUSION + "\n");
+		
+		//Goodbye
+		System.out.print(repeatChar(' ', (TOTAL_LENGTH - CONCLUSION.length()) / 2) + CONCLUSION + "\n");
 	}
 }

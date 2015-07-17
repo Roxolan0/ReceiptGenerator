@@ -20,7 +20,7 @@ public class Receipt {
 	}
 	
 	public String[] getPurchasedProductNames() {
-		String[] array = null;
+		String[] array = new String[purchasedProducts.size()];
 		return purchasedProducts.keySet().toArray(array);
 	}
 	

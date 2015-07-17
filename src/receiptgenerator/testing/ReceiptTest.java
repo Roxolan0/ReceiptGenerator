@@ -44,8 +44,11 @@ public class ReceiptTest {
 		productDatabaseTask3.put(new Product("Frozen pizza", 2.5, true, false));
 	}
 	
+	/*
+	 * Task 1 tests
+	 */
 	@Test
-	public void parseTillOutputTest1() {
+	public void parseTillOutputTask1Test1() {
 		String testTillOutput = "Orange|5\nBanana|3\n";
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
@@ -58,7 +61,7 @@ public class ReceiptTest {
 	}
 
 	@Test
-	public void parseTillOutputTest2() {
+	public void parseTillOutputTask1Test2() {
 		String testTillOutput = "Orange|1\nTomato|3\nFrozen pizza|3\nBox of cereal|2\n";
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
@@ -75,7 +78,7 @@ public class ReceiptTest {
 	}
 
 	@Test
-	public void parseTillOutputTest3() {
+	public void parseTillOutputTask1Test3() {
 		String testTillOutput = "Loaf of bread|1\n";
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
@@ -86,7 +89,7 @@ public class ReceiptTest {
 	}
 	
 	@Test
-	public void totalPriceForProductTest1() {
+	public void totalPriceForProductTask1Test1() {
 		String testTillOutput = "Orange|5\nBanana|3\n";
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
@@ -96,7 +99,7 @@ public class ReceiptTest {
 	}
 	
 	@Test
-	public void totalPriceForProductTest2() {
+	public void totalPriceForProductTask1Test2() {
 		String testTillOutput = "Orange|1\nTomato|3\nFrozen pizza|3\nBox of cereal|2\n";
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
@@ -108,7 +111,7 @@ public class ReceiptTest {
 	}
 	
 	@Test
-	public void totalPriceTest1() {
+	public void totalPriceTask1Test1() {
 		String testTillOutput = "Orange|5\nBanana|3\n";
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
@@ -117,12 +120,32 @@ public class ReceiptTest {
 	}
 	
 	@Test
-	public void totalPriceTest2() {
+	public void totalPriceTask1Test2() {
 		String testTillOutput = "Orange|1\nTomato|3\nFrozen pizza|3\nBox of cereal|2\n";
 		Receipt testReceipt = new Receipt();
 		testReceipt.parseTillOutput(testTillOutput);
 		
 		assertEquals(testReceipt.totalPrice(productDatabaseTask1), 12.1, EPSILON);
 	}
-
+	
+	/*
+	 * Task 2 tests
+	 */
+	@Test
+	public void totalPriceTask2Test1() {
+		String testTillOutput = "Orange|5\nBanana|3\n";
+		Receipt testReceipt = new Receipt();
+		testReceipt.parseTillOutput(testTillOutput);
+		
+		assertEquals(testReceipt.totalPrice(productDatabaseTask2), 2.36, EPSILON);
+	}
+	
+	@Test
+	public void totalPriceTask2Test2() {
+		String testTillOutput = "Orange|1\nTomato|3\nFrozen pizza|3\nBox of cereal|2\n";
+		Receipt testReceipt = new Receipt();
+		testReceipt.parseTillOutput(testTillOutput);
+		
+		assertEquals(testReceipt.totalPrice(productDatabaseTask2), 9.6, EPSILON);
+	}
 }

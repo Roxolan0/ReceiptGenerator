@@ -43,15 +43,17 @@ public class Receipt extends LinkedHashMap<String, Integer> {
 		String sectionDelimiter = "\\|";
 
 		clear();
-		try {
-			for (String tillOutputLine : tillOutput.split(lineDelimiter)) {		//For each item
-				String itemName = tillOutputLine.split(sectionDelimiter)[0];
-				String itemQuantityString = tillOutputLine.split(sectionDelimiter)[1];
-				int itemQuantity = Integer.parseInt(itemQuantityString);
-				put(itemName, itemQuantity);
+		if(tillOutput != null && tillOutput.length() > 0) {
+			try {
+				for (String tillOutputLine : tillOutput.split(lineDelimiter)) {		//For each item
+					String itemName = tillOutputLine.split(sectionDelimiter)[0];
+					String itemQuantityString = tillOutputLine.split(sectionDelimiter)[1];
+					int itemQuantity = Integer.parseInt(itemQuantityString);
+					put(itemName, itemQuantity);
+				}
+			} catch (Exception ex) {
+				System.err.println("Error: " + tillOutput + " does not use the till output format.");
 			}
-		} catch (Exception ex) {
-			System.err.println("Error: " + tillOutput + " does not use the till output format.");
 		}
 	}
 
@@ -63,11 +65,9 @@ public class Receipt extends LinkedHashMap<String, Integer> {
 	public double totalCostForItem(String itemName, ItemDatabase itemDatabase) {
 		double total = 0.0;
 
-		if (!containsKey(itemName)) {
-			System.err.println("Error: No " + itemName + " on this receipt.");
-		} else if (!itemDatabase.containsKey(itemName)) {
+		if (!itemDatabase.containsKey(itemName)) {
 			System.err.println("Error: No " + itemName + " in the item database.");
-		} else {
+		} else if (containsKey(itemName)){
 			total = get(itemName) * itemDatabase.get(itemName).getCost();
 		}
 
@@ -80,14 +80,12 @@ public class Receipt extends LinkedHashMap<String, Integer> {
 	 * @return How much (if anything) should be deduced from the total cost because
 	 * of a 2-for-1 discount.
 	 */
-	public double discount2For1ForItem(String itemName, ItemDatabase itemDatabase) {
+	public double discount2For1(String itemName, ItemDatabase itemDatabase) {
 		double discount = 0.0;
 
-		if (!containsKey(itemName)) {
-			System.err.println("Error: No " + itemName + " on this receipt.");
-		} else if(!itemDatabase.containsKey(itemName)) {
+		if(!itemDatabase.containsKey(itemName)) {
 			System.err.println("Error: No " + itemName + " in the item database.");
-		} else if(itemDatabase.get(itemName).is2for1()) {
+		} else if(containsKey(itemName) && itemDatabase.get(itemName).is2for1()) {
 			discount = get(itemName) / 2 * itemDatabase.get(itemName).getCost();
 		}
 
@@ -178,7 +176,7 @@ public class Receipt extends LinkedHashMap<String, Integer> {
 		double total = totalCostWithoutDiscounts(itemDatabase);	//Initial cost
 
 		for (String itemName : keySet()) {						//2-for-1 discount
-			total -= discount2For1ForItem(itemName, itemDatabase);
+			total -= discount2For1(itemName, itemDatabase);
 		}
 
 		separateFreeFruitVeggie(itemDatabase);					//3-for-2 discount

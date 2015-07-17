@@ -71,7 +71,7 @@ public class ReceiptDisplay {
 			System.out.print(receiptLine + "\n");
 			
 			//2-for-1 discount (if any)
-			double discount2for1 = receipt.discount2For1ForItem(itemName, itemDatabase);
+			double discount2for1 = receipt.discount2For1(itemName, itemDatabase);
 			if (discount2for1 > 0) {
 				String discount2for1String = "-" + COST_FORMAT.format(discount2for1);
 				System.out.print(DISCOUNT_2FOR1
@@ -84,11 +84,11 @@ public class ReceiptDisplay {
 		receipt.separateFreeFruitVeggie(itemDatabase);
 		if (receipt.getFreeFruitVeggie() != null) {
 			for (String itemName : receipt.getFreeFruitVeggie().keySet()) {
-				String discount3for2String = "-" + COST_FORMAT.format(itemDatabase.get(itemName).getCost());
+				String discount3For2String = "-" + COST_FORMAT.format(itemDatabase.get(itemName).getCost());
 				for (int i = 0; i < receipt.getFreeFruitVeggie().get(itemName); ++i) {
 					System.out.print(DISCOUNT_3FOR2 
-						+ repeatChar(' ', TOTAL_LENGTH - DISCOUNT_3FOR2.length() - discount3for2String.length())
-						+ discount3for2String + "\n");
+						+ repeatChar(' ', TOTAL_LENGTH - DISCOUNT_3FOR2.length() - discount3For2String.length())
+						+ discount3For2String + "\n");
 				}
 			}
 		}

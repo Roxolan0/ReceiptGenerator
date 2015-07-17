@@ -1,10 +1,32 @@
 package receiptgenerator.business;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Receipt {
 	
 	private HashMap<String, Integer> purchasedProducts;
+	
+	public Receipt() {
+		
+	}
+	
+	public Receipt(String tillOutput) {
+		parseTillOutput(tillOutput);
+	}
+	
+	public HashMap<String, Integer> getPurchasedProducts() {
+		return purchasedProducts;
+	}
+	
+	public String[] getPurchasedProductNames() {
+		String[] array = null;
+		return purchasedProducts.keySet().toArray(array);
+	}
+	
+	public int getAmount(String productName) {
+		return purchasedProducts.get(productName);
+	}
 	
 	/**
 	 * @param tillOutput The string created by the till; formatted as a series of "string|integer\n"
@@ -25,8 +47,24 @@ public class Receipt {
 			}
 		}
 	}
-
-	public HashMap<String, Integer> getPurchasedProducts() {
-		return purchasedProducts;
+	
+	public double totalPriceForProduct(String productName, HashMap<String, Double> priceList) {
+		double total = 0.0;
+		
+		if(purchasedProducts.containsKey(productName) && priceList.containsKey(productName)) {
+			total = purchasedProducts.get(productName) * priceList.get(productName);
+		}
+		
+		return total;
+	}
+	
+	public double totalPrice(HashMap<String, Double> priceList) {
+		double total = 0.0;
+		
+		for(String product : purchasedProducts.keySet()) {
+			total += totalPriceForProduct(product, priceList);
+		}
+		
+		return total;
 	}
 }

@@ -1,24 +1,26 @@
 package receiptgenerator.view;
 
 import java.util.HashMap;
-import java.util.Map;
+
+import receiptgenerator.business.Receipt;
 
 public class ReceiptDisplay {
 	
-	public static void printReceipt(HashMap<String, Integer> receiptMap, HashMap<String, Double> priceList) {
+	public static void printReceipt(Receipt receipt, HashMap<String, Double> priceList) {
 		
 		System.out.print("          Customer Receipt\n"
 				+ "\n"
 				+ "Item          Quantity          Cost\n"
 				+ "нннннннннннннннннннннннннннннннннннн\n");
-		for(Map.Entry<String, Integer> entry : receiptMap.entrySet()) {
-			if(priceList.containsKey(entry.getKey())) {
-				System.out.print(entry.getKey() + "               " 
-						+ entry.getValue() + "          "
-						+ priceList.get(entry.getKey())
-						+ "\n");
-			}
+		for(String productName : receipt.getPurchasedProductNames()) {
+			System.out.print(productName + "               " 
+					+ receipt.getAmount(productName) + "          "
+					+ receipt.totalPriceForProduct(productName, priceList)
+					+ "\n");
 		}
-		System.out.print("нннннннннннннннннннннннннннннннннннн\n");
+		System.out.print("нннннннннннннннннннннннннннннннннннн\n"
+				+ "Total                          г" + receipt.totalPrice(priceList) + "\n"
+				+ "\n"
+				+ "Thank you for shopping at SupaMarket\n");
 	}
 }

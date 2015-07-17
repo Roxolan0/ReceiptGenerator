@@ -9,7 +9,7 @@ import receiptgenerator.business.Receipt;
 
 public class ReceiptDisplay {
 	
-	private static final DecimalFormat PRICE_FORMAT = new DecimalFormat("#0.00");
+	private static final DecimalFormat COST_FORMAT = new DecimalFormat("#0.00");
 	private static final int ITEM_LENGTH = 21;
 	private static final int QUANTITY_LENGTH = 10;
 	private static final int COST_LENGTH = 7;
@@ -19,8 +19,9 @@ public class ReceiptDisplay {
 	private static final String ITEM = "Item";
 	private static final String QUANTITY = "Quantity";
 	private static final String COST = "Cost";
-	private static final String TOTAL = "Total";
+	private static final String TOTAL_COST = "Total";
 	private static final String CONCLUSION = "Thank you for shopping at SupaMarket";
+	private static final String DISCOUNT_2FOR1 = "  2 for 1 discount";
 	
 	private static String repeatChar(char repeatedChar, int length) {
 		if(length < 0) {
@@ -45,21 +46,30 @@ public class ReceiptDisplay {
 		
 		for(String productName : receipt.getPurchasedProductNames()) {
 			String quantity = Integer.toString(receipt.getAmount(productName));
-			String price = PRICE_FORMAT.format(receipt.totalPriceForProduct(productName, productDatabase));
+			String price = COST_FORMAT.format(receipt.totalPriceForProduct(productName, productDatabase));
 			String receiptLine = "";
 			receiptLine += productName + repeatChar(' ', ITEM_LENGTH - productName.length());
 			receiptLine += quantity;
 			receiptLine += repeatChar(' ', TOTAL_LENGTH - receiptLine.length() - price.length());
 			receiptLine += price;
 			System.out.print(receiptLine + "\n");
+			
+			double discount2for1 = receipt.discount2For1ForProduct(productName, productDatabase);
+			if(discount2for1 > 0) {
+				String discount2for1String = "-" + COST_FORMAT.format(discount2for1);
+				System.out.print(DISCOUNT_2FOR1 
+						+ repeatChar(' ', TOTAL_LENGTH - DISCOUNT_2FOR1.length() - discount2for1String.length())
+						+ discount2for1String
+						+ "\n");
+			}
 		}
 		
 		System.out.print(repeatChar('-', TOTAL_LENGTH) + "\n");
 		
-		String totalPrice = "£" + PRICE_FORMAT.format(receipt.totalPrice(productDatabase));
-		System.out.print(TOTAL 
-				+ repeatChar(' ', TOTAL_LENGTH - TOTAL.length() - totalPrice.length()) 
-				+ totalPrice
+		String totalCost = "£" + COST_FORMAT.format(receipt.totalPrice(productDatabase));
+		System.out.print(TOTAL_COST 
+				+ repeatChar(' ', TOTAL_LENGTH - TOTAL_COST.length() - totalCost.length()) 
+				+ totalCost
 				+ "\n");
 		System.out.print("\n");
 		System.out.print(repeatChar(' ', (TOTAL_LENGTH - CONCLUSION.length())/2) + CONCLUSION + "\n");

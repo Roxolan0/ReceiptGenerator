@@ -14,6 +14,9 @@ public class Receipt {
 		parseTillOutput(tillOutput);
 	}
 	
+	/*
+	 * This getter exists just for unit testing purposes.
+	 */
 	public HashMap<String, Integer> getPurchasedProducts() {
 		return purchasedProducts;
 	}
@@ -58,14 +61,24 @@ public class Receipt {
 		return total;
 	}
 	
+	public double discount2For1ForProduct(String productName, ProductDatabase productDatabase) {
+		double discount = 0.0;
+		
+		if(purchasedProducts.containsKey(productName) 
+				&& productDatabase.containsKey(productName)
+				&& productDatabase.get(productName).is2for1()) {
+			discount = purchasedProducts.get(productName)/2 * productDatabase.get(productName).getPrice();
+		}
+		
+		return discount;
+	}
+	
 	public double totalPrice(ProductDatabase productDatabase) {
 		double total = 0.0;
 		
 		for(String productName : purchasedProducts.keySet()) {
 			total += totalPriceForProduct(productName, productDatabase);
-			if(productDatabase.get(productName).is2for1()) {
-				total -= purchasedProducts.get(productName)/2 * productDatabase.get(productName).getPrice();
-			}
+			total -= discount2For1ForProduct(productName, productDatabase);
 		}
 		
 		return total;
